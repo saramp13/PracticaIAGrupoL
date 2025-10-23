@@ -43,11 +43,14 @@ public class Pruebita
                 processed.Add(current); //Añadimos a la lista el nodo final
                 toSearch.Remove(current); //Se quita de la lista de por explorar
           
-                //Si el nodo current es el mismo que el target
-                if(current.Cell == targetNode)
-                {
+                //---VOLVER A ESTO AL FINAL DEL TODO!!!!----
+                ////Si el nodo current es el mismo que el target
+                //if(current.Cell == targetNode)
+                //{
+                //    var currentPathNode = targetNode;
+                //    var path = new List<NodeRecord>();
                     
-                }
+                //}
             
             }
 
