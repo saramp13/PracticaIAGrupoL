@@ -2,6 +2,7 @@ using UnityEngine;
 using Navigation.Interfaces;
 using Navigation.World;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 public class Pruebita
 {
@@ -18,7 +19,9 @@ public class Pruebita
         {
             var startRecord = new NodeRecord(startNode);
             startRecord.G = 0;
-            startRecord.H = Vector3.Distance(startNode.Position, targetNode.Position);
+            Vector3 startPos = new Vector3(startNode.x, 0, startNode.y);
+            Vector3 targetPos = new Vector3(targetNode.x, 0, targetNode.y);
+            startRecord.H = Vector3.Distance(startPos,targetPos);
 
             //Creamos dos listas para almacenar nodos
             var toSearch = new List<NodeRecord>() { startRecord }; //Nodos por explorar empezando por el inicial
@@ -38,20 +41,17 @@ public class Pruebita
                 }
 
                 processed.Add(current); //Añadimos a la lista el nodo final
-                toSearch.RemoveAt(current); //Se quita de la lista de por explorar
+                toSearch.Remove(current); //Se quita de la lista de por explorar
           
                 //Si el nodo current es el mismo que el target
-                if(current == targetNode)
+                if(current.Cell == targetNode)
                 {
                     
                 }
             
             }
 
-            
-
-
-
+            return new CellInfo[0];
 
             //throw new System.NotImplementedException();
         }
