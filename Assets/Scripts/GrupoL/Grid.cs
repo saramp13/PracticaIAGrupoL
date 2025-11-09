@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using System;
+using System.Collections.Generic;
 
 public class Grid : MonoBehaviour
 {
@@ -8,7 +8,7 @@ public class Grid : MonoBehaviour
     public Vector2 gridWorldSize;
     public float nodeRadius;
     Node[,] grid;
-    public Transform player;
+    public Transform player; //usado para comprobación de creación grid
 
     float nodeDiameter;
     int gridSizeX, gridSizeY;
@@ -40,13 +40,37 @@ public class Grid : MonoBehaviour
                 //Creamos una esfera alrededor de nodeRadius de cada noda y si no colisiona con nada es walkable
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius,unwalkableMask));
                 //Guarda los nodos con su información
-                grid[x,y] = new Node(walkable, worldPoint);
+                grid[x,y] = new Node(walkable, worldPoint,x,y);
             }
         }
     }
 
+    public List<Node> GetNeighbours(Node node)
+    {
+        List<Node> neighbours = new List<Node>();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
+                {
+                    continue;// skip esta iteración ya que es el nodo propio
+                }
+                int checkX = node.gridX + x;
+                int checkY = node.gridY + y;
+
+                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+                {
+                    neighbours.Add(grid[checkX, checkY]);
+                }
+            }
+        }
+        return neighbours;
+    }
+
     //Convertir posiciones (x,y) del escenario en un Nodo
-    Node NodeinGameWorld(Vector3 worldPos)
+    public Node NodeinGameWorld(Vector3 worldPos)
     {
         //Convertimos en porcentaje la posición de nodo
         float percentX = (worldPos.x - transform.position.x + gridWorldSize.x / 2) / gridWorldSize.x; //Dónde cae la posición dentro del grid como porcentaje
@@ -63,26 +87,36 @@ public class Grid : MonoBehaviour
     }
 
 
-
+    public List<Node> path;
     void OnDrawGizmos() //Wireframe del grid en unity
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
         //comprobación de creación grid nodos con colores
-        //if (grid != null)
-        //{
-        //    Node playerNode = NodeinGameWorld(player.position);
-        //    foreach (Node n in grid)
-        //    {
-        //        Gizmos.color = (n.walkable) ? Color.white : Color.red;
-        //        //comprobación función de nodo a coordenadas en el agente
-        //        if (playerNode == n)
-        //        {
-        //            Gizmos.color = Color.cyan;
-        //        }
-        //        Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - .1f));
+        if (grid != null)
+        {
+            Node playerNode = NodeinGameWorld(player.position);
+            foreach (Node n in grid)
+            {
+                Gizmos.color = (n.walkable) ? Color.white : Color.red;
+                //comprobación función de nodo a coordenadas en el agente
+                if (playerNode == n)
+                {
+                    Gizmos.color = Color.cyan;
+                }
+                if(path != null)
+                {
+                    if (path.Contains(n))
+                    {
+                        Gizmos.color = Color.black;
+                    }
 
-        //    }
-        //}
+                }
+                Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - .1f));
+
+            }
+        }
     }
+
+
 }
