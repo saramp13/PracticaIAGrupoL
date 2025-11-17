@@ -8,6 +8,8 @@ public class AStarManager : MonoBehaviour
 
     Grid grid;
 
+    [SerializeField] private AgentMovement agentMove;
+
     void Awake()
     {
         grid = GetComponent<Grid>();
@@ -91,6 +93,13 @@ public class AStarManager : MonoBehaviour
         path.Reverse();
 
         grid.path=path;
+
+        //Movimiento del personaje, llamamos a SearchAgent
+        if (agentMove != null)
+        {
+            agentMove.SetPath(grid.path);
+        }
+
     }
 
     //Distancia entre dos nodos teniendo en cuenta diagonales
