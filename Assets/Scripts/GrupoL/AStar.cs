@@ -4,7 +4,6 @@ using Navigation.World;
 using UnityEngine;
 
 //ESQUELETO CODIGO BUENO: IMPLEMENTAR EL ALGORITMO A*
-//HAY QUE MIRAR LOS ERRORES
 
 namespace GrupoL {
     public class AStar : INavigationAlgorithm
@@ -64,6 +63,8 @@ namespace GrupoL {
             return new CellInfo[0];
         }
 
+        //TECNICAMENTE ESTO SE PODRIA PONER EN WORLDINFO PERO ME DA MIEDITO TOCAR ESA CLASE
+        // SI LO HICIERAMOS ASI SERIA REUTILIZABLE PARA OTROS ALGORITMOS
         private IEnumerable<CellInfo> GetNeighbours(CellInfo cell)
         {
             int x = cell.x;
