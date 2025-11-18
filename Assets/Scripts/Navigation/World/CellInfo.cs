@@ -48,6 +48,7 @@ namespace Navigation.World
         
         public GameObject GameObject;
         public CellType Type;
+        //Coordenadas de la celda
         public readonly int x;
         public readonly int y;
         
