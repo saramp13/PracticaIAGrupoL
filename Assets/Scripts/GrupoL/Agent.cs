@@ -9,6 +9,7 @@ using UnityEngine;
 namespace GrupoL {
     public class Agent : INavigationAgent
     {
+
         public CellInfo CurrentObjective { get; private set; }
         public Vector3 CurrentDestination { get; private set; }
         public int NumberOfDestinations { get; private set; }
@@ -21,24 +22,21 @@ namespace GrupoL {
         {
             _world = worldInfo;
             _algorithm = navigationAlgorithm;
-
             _algorithm.Initialize(worldInfo);
 
-            // Objetivo por defecto: la salida del mundo
+            // Objetivo: la salida
             CurrentObjective = _world.Exit;
-
             NumberOfDestinations = 1;
         }
 
         public Vector3? GetNextDestination(Vector3 currentPosition)
         {
-            // Si no hay camino o ya se consumió:
+            // Si no tenemos ruta o ya se consumió
             if (_path == null || _path.Count == 0)
             {
-                var startCell = _world.FromVector3(currentPosition);
+                var currentCell = _world.FromVector3(currentPosition);
 
-                // Le pedimos al algoritmo UNA RUTA COMPLETA
-                var result = _algorithm.GetPath(startCell, CurrentObjective);
+                var result = _algorithm.GetPath(currentCell, CurrentObjective);
 
                 if (result == null || result.Length == 0)
                     return null;
@@ -46,10 +44,10 @@ namespace GrupoL {
                 _path = new Queue<CellInfo>(result);
             }
 
-            // Consumimos el siguiente waypoint
             var nextCell = _path.Dequeue();
             CurrentDestination = _world.ToWorldPosition(nextCell);
             return CurrentDestination;
         }
+
     }
 }

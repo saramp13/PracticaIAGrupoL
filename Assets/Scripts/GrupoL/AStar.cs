@@ -2,99 +2,98 @@ using System.Collections.Generic;
 using Navigation.Interfaces;
 using Navigation.World;
 using UnityEngine;
-using static Navigation.World.CellInfo;
 
 //ESQUELETO CODIGO BUENO: IMPLEMENTAR EL ALGORITMO A*
-// HAY QUE MIRAR LOS ERRORES
 
 namespace GrupoL {
     public class AStar : INavigationAlgorithm
     {
+
         private WorldInfo _world;
 
-        public void Initialize(WorldInfo worldInfo)
+        public void Initialize(WorldInfo world)
         {
-            _world = worldInfo;
+            _world = world;
         }
 
-        public CellInfo[] GetPath(CellInfo startNode, CellInfo goalNode)
+        public CellInfo[] GetPath(CellInfo start, CellInfo goal)
         {
-            // OPEN y CLOSED
-            var openSet = new List<CellInfo>();
+            var openSet = new List<CellInfo> { start };
             var closedSet = new HashSet<CellInfo>();
 
-            openSet.Add(startNode);
-
-            // Diccionarios para almacenar costes y padres
-            var gCost = new Dictionary<CellInfo, int>();
-            var fCost = new Dictionary<CellInfo, int>();
             var cameFrom = new Dictionary<CellInfo, CellInfo>();
-
-            gCost[startNode] = 0;
-            fCost[startNode] = Heuristic(startNode, goalNode);
+            var gCost = new Dictionary<CellInfo, int> { [start] = 0 };
+            var fCost = new Dictionary<CellInfo, int> { [start] = Heuristic(start, goal) };
 
             while (openSet.Count > 0)
             {
-                // Seleccionamos el nodo con menor fCost
+                // Nodo con menor fCost
                 CellInfo current = openSet[0];
-                foreach (var node in openSet)
+                for (int i = 1; i < openSet.Count; i++)
                 {
-                    if (fCost[node] < fCost[current])
-                        current = node;
+                    if (fCost[openSet[i]] < fCost[current])
+                        current = openSet[i];
                 }
 
-                // Si hemos llegado al objetivo
-                if (current == goalNode)
+                if (current == goal)
                     return ReconstructPath(cameFrom, current);
 
                 openSet.Remove(current);
                 closedSet.Add(current);
 
-                // Vecinos
-                foreach (var neighbour in _world.GetNeighbours(current))
+                foreach (var neighbour in GetNeighbours(current))
                 {
-                    // Saltamos muros, límites y celdas bloqueadas
-                    if (neighbour.Type == CellType.Wall || neighbour.Type == CellType.Limit)
+                    if (closedSet.Contains(neighbour) || !neighbour.Walkable)
                         continue;
 
-                    if (closedSet.Contains(neighbour))
-                        continue;
-
-                    int tentative = gCost[current] + 1; // coste uniforme (4 direcciones)
+                    int tentativeG = gCost[current] + 1;
 
                     if (!openSet.Contains(neighbour))
                         openSet.Add(neighbour);
-                    else if (tentative >= gCost[neighbour])
+                    else if (tentativeG >= gCost.GetValueOrDefault(neighbour, int.MaxValue))
                         continue;
 
                     cameFrom[neighbour] = current;
-                    gCost[neighbour] = tentative;
-                    fCost[neighbour] = tentative + Heuristic(neighbour, goalNode);
+                    gCost[neighbour] = tentativeG;
+                    fCost[neighbour] = tentativeG + Heuristic(neighbour, goal);
                 }
             }
 
-            return new CellInfo[0]; // Si no hay camino
+            // No hay camino
+            return new CellInfo[0];
+        }
+
+        //TECNICAMENTE ESTO SE PODRIA PONER EN WORLDINFO PERO ME DA MIEDITO TOCAR ESA CLASE
+        // SI LO HICIERAMOS ASI SERIA REUTILIZABLE PARA OTROS ALGORITMOS
+        private IEnumerable<CellInfo> GetNeighbours(CellInfo cell)
+        {
+            int x = cell.x;
+            int y = cell.y;
+
+            if (x > 0) yield return _world[x - 1, y];
+            if (x < _world.WorldSize.x - 1) yield return _world[x + 1, y];
+            if (y > 0) yield return _world[x, y - 1];
+            if (y < _world.WorldSize.y - 1) yield return _world[x, y + 1];
         }
 
         private int Heuristic(CellInfo a, CellInfo b)
         {
-            // Manhattan (recomendada para movimiento en 4 direcciones)
-            return Mathf.Abs(a.X - b.X) + Mathf.Abs(a.Y - b.Y);
+            // Manhattan (4 direcciones)
+            return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
         }
 
         private CellInfo[] ReconstructPath(Dictionary<CellInfo, CellInfo> cameFrom, CellInfo current)
         {
-            var path = new List<CellInfo>();
-            path.Add(current);
-
+            var path = new List<CellInfo> { current };
             while (cameFrom.ContainsKey(current))
             {
                 current = cameFrom[current];
                 path.Add(current);
             }
-
             path.Reverse();
             return path.ToArray();
         }
+
+
     }
 }
