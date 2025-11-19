@@ -8,6 +8,9 @@ using UnityEngine;
 //ALGORITMO A* PARA LOS COFRES Y LA SALIDA
 
 namespace GrupoL {
+
+    //Iris Muñoz, 17/11/2025
+
     public class AStarCofres : INavigationAlgorithm
     {
 

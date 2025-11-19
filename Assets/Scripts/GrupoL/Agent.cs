@@ -16,7 +16,7 @@ namespace GrupoL {
     //que luego utiliza para ir indicando la siguiente posición
     //La lógica del movimiento la gestiona NavigationMovement
     //Esta clase Agent se comunica con NavigationMovement mediante la interfaz INavigationAgent, indicándole cuales
-    //son las coordenadas de la siguiente posicion para que el personaje se mueva a esa posición
+    //son las coordenadas de la siguiente posición para que el personaje se mueva a esa posición
     //En resumen: Agent usa las celdas calculadas en AStar para ordenar el camino
     //y que NavigationMovement pueda mover al personaje de manera ordenada
 
