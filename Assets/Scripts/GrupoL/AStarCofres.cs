@@ -15,10 +15,19 @@ namespace GrupoL {
     {
 
         private WorldInfo _world;
-        
+        private Node[,] _nodeGrid;
+
         public void Initialize(WorldInfo world)
         {
             _world = world;
+            int sizeX = _world.WorldSize.x;
+            int sizeY = _world.WorldSize.y;
+
+            _nodeGrid = new Node[sizeX, sizeY];
+
+            for (int x = 0; x < sizeX; x++)
+                for (int y = 0; y < sizeY; y++)
+                    _nodeGrid[x, y] = new Node(_world[x, y]);
         }
 
         public CellInfo[] GetPath(CellInfo start, CellInfo goal)
@@ -67,44 +76,59 @@ namespace GrupoL {
 
         private CellInfo[] AStar(CellInfo start, CellInfo goal) //Vamos a usar el algoritmo A* secuencialmente, por eso lo separamos en otro método
         {
-            var openSet = new List<CellInfo> { start };
-            var closedSet = new HashSet<CellInfo>();
+            Node startNode = _nodeGrid[start.x, start.y];
+            Node goalNode = _nodeGrid[goal.x, goal.y];
+            // Reset de nodos
+            foreach (var node in _nodeGrid)
+            {
+                node.gCost = int.MaxValue;
+                node.hCost = 0;
+                node.parent = null;
+            }
 
-            var cameFrom = new Dictionary<CellInfo, CellInfo>();
-            var gCost = new Dictionary<CellInfo, int> { [start] = 0 };
-            var fCost = new Dictionary<CellInfo, int> { [start] = Heuristic(start, goal) };
+            List<Node> openSet = new List<Node>();
+            List<Node> closedSet = new List<Node>();
+            openSet.Add(startNode);
+            startNode.gCost = 0;
+            startNode.hCost = Heuristic(start, goal);
 
             while (openSet.Count > 0)
             {
+                Node current = openSet[0];
+
                 // Nodo con menor fCost
-                CellInfo current = openSet[0];
                 for (int i = 1; i < openSet.Count; i++)
                 {
-                    if (fCost[openSet[i]] < fCost[current])
+                    if (openSet[i].fCost < current.fCost ||
+                        (openSet[i].fCost == current.fCost && openSet[i].hCost < current.hCost))
                         current = openSet[i];
                 }
-
-                if (current == goal)
-                    return ReconstructPath(cameFrom, current);
-
                 openSet.Remove(current);
                 closedSet.Add(current);
 
-                foreach (var neighbour in GetNeighbours(current))
+                if (current == goalNode)
+                    return ReconstructPath(startNode, current);
+
+                foreach (var neighbourCell in GetNeighbours(current.cell))
                 {
-                    if (closedSet.Contains(neighbour) || !neighbour.Walkable)
+                    if (!neighbourCell.Walkable)
                         continue;
 
-                    int tentativeG = gCost[current] + 1;
+                    Node neighbour = _nodeGrid[neighbourCell.x, neighbourCell.y];
+
+                    if (closedSet.Contains(neighbour))
+                        continue;
+
+                    int tentativeG = current.gCost + 1;
 
                     if (!openSet.Contains(neighbour))
                         openSet.Add(neighbour);
-                    else if (tentativeG >= gCost.GetValueOrDefault(neighbour, int.MaxValue))
+                    else if (tentativeG >= neighbour.gCost)
                         continue;
 
-                    cameFrom[neighbour] = current;
-                    gCost[neighbour] = tentativeG;
-                    fCost[neighbour] = tentativeG + Heuristic(neighbour, goal);
+                    neighbour.gCost = tentativeG;
+                    neighbour.hCost = Heuristic(neighbour.cell, goalNode.cell);
+                    neighbour.parent = current;
                 }
             }
 
@@ -129,13 +153,15 @@ namespace GrupoL {
             return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
         }
 
-        private CellInfo[] ReconstructPath(Dictionary<CellInfo, CellInfo> cameFrom, CellInfo current)
+        private CellInfo[] ReconstructPath(Node start, Node end)
         {
-            var path = new List<CellInfo> { current };
-            while (cameFrom.ContainsKey(current))
+            List<CellInfo> path = new List<CellInfo>();
+            Node current = end;
+            while (current != start)
             {
-                current = cameFrom[current];
-                path.Add(current);
+                path.Add(current.cell);
+                current = current.parent;
+                if (current == null) break;
             }
             path.Reverse();
             return path.ToArray();
