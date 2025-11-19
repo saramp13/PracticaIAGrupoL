@@ -3,12 +3,11 @@ using Navigation.Interfaces;
 using Navigation.World;
 using UnityEngine;
 
-//ESQUELETO CODIGO BUENO: IMPLEMENTAR EL MOVIMIENTO DEL AGENTE
 
 namespace GrupoL {
     //Implementación de la interfaz INavigationAgent
 
-    //Claudia Morago, 17/11/2025
+    //Claudia Morago, 21/11/2025
 
     //Esta clase gestiona el camino que debe seguir el agente, usando los métodos de la interfaz INavigationAgent
     //El camino más óptimo se calcula usando el algoritmo A* en la clase AStar
@@ -57,11 +56,17 @@ namespace GrupoL {
                 var currentCell = _world.FromVector3(currentPosition);
                 var result = _algorithm.GetPath(currentCell, CurrentObjective); // Usa GetPath para obtener la ruta que ha calculado A*
 
-                // Comprueba que hay un camino, si no devuelve null
-                if (result == null || result.Length == 0)
-                    return null;
+                ////Si se quiere debuggear el supuesto de que no hay camino usar:
+                //var result = new CellInfo[0];
 
                 _path = new Queue<CellInfo>(result);    //Se ordenan las celdas en una cola
+
+                // Comprueba que hay un camino posible, si no devuelve null y un mensaje
+                if (_path.Count == 0) 
+                {
+                    Debug.LogWarning($"No existe ningun camino posible al destino. Mundo bloqueado");
+                    return null; 
+                }
             }
 
             var next = _path.Dequeue();     //Va obteniendo las celdas de la cola        
