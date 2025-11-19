@@ -3,10 +3,27 @@ using Navigation.Interfaces;
 using Navigation.World;
 using UnityEngine;
 
-//ESQUELETO CODIGO BUENO: IMPLEMENTAR EL ALGORITMO A*
+//ESQUELETO CODIGO: IMPLEMENTAR EL ALGORITMO A*
 
 namespace GrupoL
 {
+    // Implementación de la interfaz INavigationAlgorithm
+
+    // Sara Mesa y Claudia Morago, 21/11/2025
+    /* Esta clase implementa el aldoritmo A*, es decir, implementa la búsqueda del camino
+     * óptimo (el más corto desde un punto inicial al objetivo). 
+     * Esta clase crea una representación del mapa con la clase Nodo. Se crea un camino óptimo
+     * usando dos listas distintas de nodos pendientes y ya procesados eligiendo siempre el 
+     * fCost menor y se exploran los vecinos caminables de cada nodo. Si es necesario
+     * actualiza los costes hasta tener el mejor camino. Por último reconstruye el camino final
+     * devolviendo una lista de celdas. 
+     * 
+     * Esta clase hace uso de WorldInfo como base de datos del escenario. 
+     * Esta clase hace uso de CellInfo para acceder a coordenadas, saber tipos de celdas,
+     * si es caminable o la posición en el mundo 3D entre otras.
+     */
+
+
     public class AStar : INavigationAlgorithm
     {
         private WorldInfo _world; //referencia al mundo

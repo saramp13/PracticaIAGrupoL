@@ -3,7 +3,7 @@ using Navigation.Interfaces;
 using Navigation.World;
 using UnityEngine;
 
-//ESQUELETO CODIGO BUENO: IMPLEMENTAR EL MOVIMIENTO DEL AGENTE
+//ESQUELETO CODIGO: IMPLEMENTAR EL MOVIMIENTO DEL AGENTE
 
 namespace GrupoL {
     //Implementación de la interfaz INavigationAgent
