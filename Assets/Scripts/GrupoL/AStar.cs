@@ -9,8 +9,8 @@ namespace GrupoL
 {
     // Implementación de la interfaz INavigationAlgorithm
 
-    // Sara Mesa y Claudia Morago, 21/11/2025
-    /* Esta clase implementa el aldoritmo A*, es decir, implementa la búsqueda del camino
+    // Sara Mesa y Claudia Morago, 11/11/2025
+    /* Esta clase implementa el algoritmo A*, es decir, implementa la búsqueda del camino
      * óptimo (el más corto desde un punto inicial al objetivo). 
      * Esta clase crea una representación del mapa con la clase Nodo. Se crea un camino óptimo
      * usando dos listas distintas de nodos pendientes y ya procesados eligiendo siempre el 

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GrupoL {
     //Implementación de la interfaz INavigationAgent
 
-    //Claudia Morago, 17/11/2025
+    //Claudia Morago, 12/11/2025
 
     //Esta clase gestiona el camino que debe seguir el agente, usando los métodos de la interfaz INavigationAgent
     //El camino más óptimo se calcula usando el algoritmo A* en la clase AStar
