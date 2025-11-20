@@ -23,7 +23,6 @@ namespace GrupoL
      * si es caminable o la posición en el mundo 3D entre otras.
      */
 
-
     public class AStar : INavigationAlgorithm
     {
         private WorldInfo _world; //Referencia al mundo
