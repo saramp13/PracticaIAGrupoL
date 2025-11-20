@@ -3,13 +3,12 @@ using Navigation.Interfaces;
 using Navigation.World;
 using UnityEngine;
 
-//ESQUELETO CODIGO: IMPLEMENTAR EL ALGORITMO A*
 
 namespace GrupoL
 {
     // Implementación de la interfaz INavigationAlgorithm
 
-    // Sara Mesa y Claudia Morago, 21/11/2025
+    // Sara Mesa y Claudia Morago, 2/11/2025
     /* Esta clase implementa el aldoritmo A*, es decir, implementa la búsqueda del camino
      * óptimo (el más corto desde un punto inicial al objetivo). 
      * Esta clase crea una representación del mapa con la clase Nodo. Se crea un camino óptimo
