@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace GrupoL
 {
+    //Sara Mesa, 17/11/2025
     public class AStar : INavigationAlgorithm
     {
         private WorldInfo _world; //referencia al mundo

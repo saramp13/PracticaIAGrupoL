@@ -2630,11 +2630,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unwalkableMask:
-    serializedVersion: 2
     m_Bits: 64
   gridWorldSize: {x: 20, y: 20}
   nodeRadius: 0.5
   player: {fileID: 37634136}
+  nodeDiameter: 0
+  gridSizeX: 0
+  gridSizeY: 0
 --- !u!4 &808638617
 Transform:
   m_ObjectHideFlags: 0
@@ -2664,6 +2666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seeker: {fileID: 37634136}
   target: {fileID: 1450885458}
+  grid: {fileID: 0}
   agentMove: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
@@ -4211,6 +4214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 37634136}
+  currentIndex: 0
   speed: 5
 --- !u!114 &1271043181
 MonoBehaviour:
@@ -4225,8 +4229,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
-  navigationAgent: GrupoL.Agent
-  navigationClass: GrupoL.AStarCofres
+  navigationAgent: GrupoL.AgentZombies
+  navigationClass: GrupoL.AStarZombies
 --- !u!1 &1271731443
 GameObject:
   m_ObjectHideFlags: 0
