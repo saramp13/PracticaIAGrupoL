@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace GrupoL {
 
-    //Iris Muñoz, 17/11/2025
+    //Iris Muñoz, 15/11/2025
 
     public class AStarCofres : INavigationAlgorithm
     {
