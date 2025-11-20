@@ -8,7 +8,16 @@ using UnityEngine;
 namespace GrupoL {
 
     //Iris Muñoz 18/11/2025
-
+    /*
+     Esta clase implementa la búsqueda online de zombies en la escena.
+     Para ello se crearon los métodos ZombieMasCercano y CofreMasCercano, que comprueban si quedan zombies y cofres a recoger
+     y devuelven el zombie o cofre más próximo al agente; y los métodos DistNumAlZombie y DistNumAlCofre, que toman los caminos
+     devueltos por los otros dos métodos y los convierten en valores numéricos.
+     El agente decide sus objetivos en GetNextDestination. Aquí se comprueban primero los zombies cerca del agente y si hay algún
+     cofre aún más cerca que los zombies, en cuyo caso el agente irá a por él. De esta forma el agente prioriza a los zombies sobre los
+     cofres pero si cualquiera de los dos pasa a estar más cerca cambia su objetivo (se adapta en tiempo real). 
+     Cuando finaliza la recogida de todos los elementos el objetivo del agente pasa a ser la salida.
+    */
     public class AgentZombies : INavigationAgent
     {
         public CellInfo CurrentObjective { get; private set; }  //celda final (salida)

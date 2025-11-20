@@ -10,6 +10,11 @@ using UnityEngine;
 namespace GrupoL {
 
     //Iris Muñoz, 18/11/2025
+    /*
+     Esta clase complementa a la clase AgentZombies.
+     Se simplifica el método GetPath() para que llame únicamente al método AStar y calcule el camino para el agente,
+     dejando la decisión de qué camino calcular al mismo (se decide en AgentZombies).
+     */
 
     public class AStarZombies : INavigationAlgorithm
     {

@@ -10,6 +10,12 @@ using UnityEngine;
 namespace GrupoL {
 
     //Iris Muñoz, 15/11/2025
+    /*
+     Esta clase modifica el método GetPath() para que el agente se mueva hacia los cofres y los visite del más cercano al más lejano.
+     Se recorre el grid en busca de la posición de los cofres, se calcula la distancia hasta ellos desde el agente y se introducen
+     en una lista en orden del menor al mayor coste.
+     Se calcula un recorrido completo con todos los cofres y la salida para que el agente lo siga.
+     */
 
     public class AStarCofres : INavigationAlgorithm
     {
