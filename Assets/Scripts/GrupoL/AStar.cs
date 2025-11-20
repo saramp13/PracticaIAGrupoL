@@ -3,30 +3,29 @@ using Navigation.Interfaces;
 using Navigation.World;
 using UnityEngine;
 
-//ESQUELETO CODIGO: IMPLEMENTAR EL ALGORITMO A*
 
 namespace GrupoL
 {
-    // Implementaci髇 de la interfaz INavigationAlgorithm
+    // Implementaci贸n de la interfaz INavigationAlgorithm
 
-    // Sara Mesa y Claudia Morago, 11/11/2025
-    /* Esta clase implementa el algoritmo A*, es decir, implementa la b鷖queda del camino
-     * 髉timo (el m醩 corto desde un punto inicial al objetivo). 
-     * Esta clase crea una representaci髇 del mapa con la clase Nodo. Se crea un camino 髉timo
+    // Sara Mesa y Claudia Morago, 2/11/2025
+    /* Esta clase implementa el aldoritmo A*, es decir, implementa la b煤squeda del camino
+     * 贸ptimo (el m谩s corto desde un punto inicial al objetivo). 
+     * Esta clase crea una representaci贸n del mapa con la clase Nodo. Se crea un camino 贸ptimo
      * usando dos listas distintas de nodos pendientes y ya procesados eligiendo siempre el 
      * fCost menor y se exploran los vecinos caminables de cada nodo. Si es necesario
-     * actualiza los costes hasta tener el mejor camino. Por 鷏timo reconstruye el camino final
+     * actualiza los costes hasta tener el mejor camino. Por 煤ltimo reconstruye el camino final
      * devolviendo una lista de celdas. 
      * 
      * Esta clase hace uso de WorldInfo como base de datos del escenario. 
      * Esta clase hace uso de CellInfo para acceder a coordenadas, saber tipos de celdas,
-     * si es caminable o la posici髇 en el mundo 3D entre otras.
+     * si es caminable o la posici贸n en el mundo 3D entre otras.
      */
 
     public class AStar : INavigationAlgorithm
     {
         private WorldInfo _world; //Referencia al mundo
-        private Node[,] _nodeGrid; //Array de nodos 鷑ico por celda
+        private Node[,] _nodeGrid; //Array de nodos 煤nico por celda
 
         public void Initialize(WorldInfo world)
         {
@@ -48,7 +47,7 @@ namespace GrupoL
             Node startNode = _nodeGrid[start.x, start.y];
             Node goalNode = _nodeGrid[goal.x, goal.y];
 
-            // Reiniciar todos los nodos antes de la b鷖queda
+            // Reiniciar todos los nodos antes de la b煤squeda
             foreach (var node in _nodeGrid)
             {
                 node.gCost = int.MaxValue;
@@ -74,7 +73,7 @@ namespace GrupoL
                         currentNode = openSet[i];
                     }
                 }
-                //Quitar el nodo evaluado de open y a馻dir a close
+                //Quitar el nodo evaluado de open y a帽adir a close
                 openSet.Remove(currentNode);
                 closeSet.Add(currentNode);
 
@@ -84,18 +83,18 @@ namespace GrupoL
                     return ReconstructPath(startNode, currentNode);
                 }
 
-                //Evaluaci髇 de nodos vecinos
+                //Evaluaci贸n de nodos vecinos
                 foreach (var neighbourCell in GetNeighbours(currentNode.cell))
                 {
                     if (!neighbourCell.Walkable) { continue; } //Saltamos los nodos que no podemos pisar
 
                     Node neighbour = _nodeGrid[neighbourCell.x, neighbourCell.y];
 
-                    if (closeSet.Contains(neighbour)) { continue; }//Saltamos los nodos que ya se hab韆n analizado
+                    if (closeSet.Contains(neighbour)) { continue; }//Saltamos los nodos que ya se hab铆an analizado
 
                     //Costo del nuevo nodo
                     int newCost = currentNode.gCost + Heuristic(currentNode.cell, neighbour.cell);
-                    //Evaluaci髇 del costo y selecci髇 del menor
+                    //Evaluaci贸n del costo y selecci贸n del menor
                     if (newCost < neighbour.gCost || !openSet.Contains(neighbour))
                     {
                         neighbour.gCost = newCost;
@@ -111,7 +110,7 @@ namespace GrupoL
                 }
             }
 
-            //Si no hay informaci髇 para hacer el camino 
+            //Si no hay informaci贸n para hacer el camino 
             if (_world == null || _nodeGrid == null) return new CellInfo[0];
             return new CellInfo[0];
 

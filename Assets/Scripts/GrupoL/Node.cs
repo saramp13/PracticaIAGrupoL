@@ -7,7 +7,7 @@ namespace GrupoL
 {
     // Clase Nodo que envuelve CellInfo
 
-    // Sara Mesa, 21/11/2025
+    // Sara Mesa, 2/11/2025
     /*
      * En esta clase se crean nodos que contienen toda la información de la celda (CellInfo)
      * y se añaden variables adicionales para el cálculo de costes y reconstrucción del camino

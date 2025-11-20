@@ -31,41 +31,6 @@ namespace GrupoL {
             NumberOfDestinations = 1;
         }
 
-        private bool HayZombies()
-        {
-            for (int x = 0; x < _world.WorldSize.x; x++) //Se comprueba que quedan zombies en la escena
-            {
-                for (int y = 0; y < _world.WorldSize.y; y++)
-                {
-                    var cell = _world[x, y];
-
-                    if (cell.Type == CellInfo.CellType.Enemy)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        private bool HayCofres()
-        {
-            for (int x = 0; x < _world.WorldSize.x; x++) //Se comprueba que quedan cofres en la escena
-            {
-                for (int y = 0; y < _world.WorldSize.y; y++)
-                {
-                    var cell = _world[x, y];
-
-                    if (cell.Type == CellInfo.CellType.Treasure)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-
         //DETERMINAMOS SI HAY ALGÚN ZOMBIE CERCA DEL AGENTE
         private CellInfo ZombieMasCercano(CellInfo current)
         {
@@ -180,8 +145,15 @@ namespace GrupoL {
             {
                 var result = _algorithm.GetPath(currentCell, CurrentObjective); //Almacena el siguiente camino a seguir
 
-                if (result == null || result.Length == 0)
+                ////Si se quiere simular el supuesto de que no hay camino (no hay lista) usar:
+                //var result = new CellInfo[0];
+
+                if (result == null || result.Length == 0) 
+                {
+                    Debug.LogWarning($"No existe ningun camino posible al destino. Mundo bloqueado");
                     return null;
+                }
+                    
 
                 _path = new Queue<CellInfo>(result);
             }
