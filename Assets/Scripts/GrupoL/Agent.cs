@@ -3,20 +3,20 @@ using Navigation.Interfaces;
 using Navigation.World;
 using UnityEngine;
 
-//ESQUELETO CODIGO: IMPLEMENTAR EL MOVIMIENTO DEL AGENTE
 
-namespace GrupoL {
-    //Implementación de la interfaz INavigationAgent
+namespace GrupoL
+{
+    //Implementacion de la interfaz INavigationAgent
 
-    //Claudia Morago, 17/11/2025
+    //Claudia Morago, 21/11/2025
 
-    //Esta clase gestiona el camino que debe seguir el agente, usando los métodos de la interfaz INavigationAgent
-    //El camino más óptimo se calcula usando el algoritmo A* en la clase AStar
+    //Esta clase gestiona el camino que debe seguir el agente, usando los metodos de la interfaz INavigationAgent
+    //El camino mas optimo se calcula usando el algoritmo A* en la clase AStar
     //Esta clase Agent obtiene el camino de celdas calculado por AStar y forma una cola ordenada,
-    //que luego utiliza para ir indicando la siguiente posición
-    //La lógica del movimiento la gestiona NavigationMovement
-    //Esta clase Agent se comunica con NavigationMovement mediante la interfaz INavigationAgent, indicándole cuales
-    //son las coordenadas de la siguiente posición para que el personaje se mueva a esa posición
+    //que luego utiliza para ir indicando la siguiente posicion
+    //La logica del movimiento la gestiona NavigationMovement
+    //Esta clase Agent se comunica con NavigationMovement mediante la interfaz INavigationAgent, indic�ndole cuales
+    //son las coordenadas de la siguiente posici�n para que el personaje se mueva a esa posici�n
     //En resumen: Agent usa las celdas calculadas en AStar para ordenar el camino
     //y que NavigationMovement pueda mover al personaje de manera ordenada
 
@@ -30,8 +30,8 @@ namespace GrupoL {
         private INavigationAlgorithm _algorithm;                //referencia al algoritmo A* 
         private Queue<CellInfo> _path;                          //cola con el camino final calculado
 
-        // Este método inicializa el agente guardando las referencias a WorldInfo y a INavigationAlgorithm
-        // Después, se establece la salida como objetivo principal
+        // Este metodo inicializa el agente guardando las referencias a WorldInfo y a INavigationAlgorithm
+        // Despues, se establece la salida como objetivo principal
         public void Initialize(WorldInfo world, INavigationAlgorithm navigationAlgorithm)
         {
             _world = world;
@@ -43,11 +43,11 @@ namespace GrupoL {
             NumberOfDestinations = 1;
         }
 
-        // Este método devuelve la siguiente posición (celda) a la que el agente debe moverse 
+        // Este metodo devuelve la siguiente posici�n (celda) a la que el agente debe moverse 
         // Si no hay calculada una ruta previa o ya se ha recorrido, se genera una nueva llamando a GetPath() del algoritmo AStar
-        // Además se comprueba que existe un camino válido hasta la salida (no hay mundo bloqueado)
+        // Adem�s se comprueba que existe un camino v�lido hasta la salida (no hay mundo bloqueado)
         // Si todo esto se cumple, las celdas calculadas se ordenan en una cola (Queue)
-        // De esta manera la celda que se obtiene de la cola con Dequeue es la siguiente posición, y el agente se va moviendo
+        // De esta manera la celda que se obtiene de la cola con Dequeue es la siguiente posici�n, y el agente se va moviendo
         // de celda en celda hasta la salida
         public Vector3? GetNextDestination(Vector3 currentPosition)
         {
@@ -57,11 +57,17 @@ namespace GrupoL {
                 var currentCell = _world.FromVector3(currentPosition);
                 var result = _algorithm.GetPath(currentCell, CurrentObjective); // Usa GetPath para obtener la ruta que ha calculado A*
 
-                // Comprueba que hay un camino, si no devuelve null
-                if (result == null || result.Length == 0)
-                    return null;
+                ////Si se quiere debuggear el supuesto de que no hay camino (no hay lista) usar:
+                //var result = new CellInfo[0];
 
                 _path = new Queue<CellInfo>(result);    //Se ordenan las celdas en una cola
+
+                // Comprueba que hay un camino posible, si no devuelve null y un mensaje
+                if (_path.Count == 0)
+                {
+                    Debug.LogWarning($"No existe ningun camino posible al destino. Mundo bloqueado");
+                    return null;
+                }
             }
 
             var next = _path.Dequeue();     //Va obteniendo las celdas de la cola        
